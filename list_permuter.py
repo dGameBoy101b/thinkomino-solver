@@ -6,4 +6,4 @@ def permute_list(ls:list)->list:
 	#generate permutations
 	for index in range(len(ls)):
 		for permute in permute_list(ls[1:]):
-			yield permute[:index] + [ls[0]]  + permute[index:]
+			yield permute[:index] + [ls[0]] + permute[index:]
