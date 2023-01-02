@@ -39,7 +39,21 @@ class ThinkominoTileTest(TestCase):
 			ThinkominoTile([
 				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
 				ThinkominoColour.GREEN, ThinkominoColour.YELLOW, ThinkominoColour.PURPLE])
+		with self.assertRaises(ValueError):
+			ThinkominoTile([None, None, None, None, None, None])
 
 	def test_type_error(self):
 		with self.assertRaises(TypeError):
 			ThinkominoTile(123456)
+		with self.assertRaises(TypeError):
+			ThinkominoTile(None)
+
+	def test_indexing(self):
+		COLOURS = (
+			ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
+			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)
+		tile = ThinkominoTile(COLOURS)
+		for index in range(6):
+			self.assertEqual(tile[index], COLOURS[index])
+			self.assertEqual(tile[index:], COLOURS[index:])
+			self.assertEqual(tile[:index], COLOURS[:index])
