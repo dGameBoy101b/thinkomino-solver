@@ -7,17 +7,17 @@ class ThinkominoBoardTest(TestCase):
 
 	def test_valid_boards(self):
 		TILES = (
-			ThinkominoTile([
+			ThinkominoTile(
 				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE]),
-			ThinkominoTile([
+				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+			ThinkominoTile(
 				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW]),
+				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
 			None,
 			None,
-			ThinkominoTile([
+			ThinkominoTile(
 				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED]),
+				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
 			None)
 		board = ThinkominoBoard(TILES)
 		self.assertIsInstance(board, ThinkominoBoard)
@@ -25,16 +25,16 @@ class ThinkominoBoardTest(TestCase):
 
 	def test_solve_check(self):
 		board = ThinkominoBoard([
-			ThinkominoTile([
+			ThinkominoTile(
 				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE]),
-			ThinkominoTile([
+				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+			ThinkominoTile(
 				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW]),
+				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
 			None,
 			None,
-			ThinkominoTile([
+			ThinkominoTile(
 				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED]),
+				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
 			None])
 		self.assertFalse(board.is_solved())
