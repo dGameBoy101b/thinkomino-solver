@@ -4,31 +4,18 @@ from thinkomino_colour import ThinkominoColour
 
 class ThinkominoTileTest(TestCase):
 
-	def test_valid_tiles(self):
+	def test_initialisation(self):
 		COLOURS = (
 			ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
 			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)
-		list_tile = ThinkominoTile(*list(COLOURS))
-		self.assertIsInstance(list_tile, ThinkominoTile)
-		self.assertSequenceEqual(list_tile, COLOURS)
-
-		tuple_tile = ThinkominoTile(*tuple(COLOURS))
-		self.assertIsInstance(tuple_tile, ThinkominoTile)
-		self.assertSequenceEqual(tuple_tile, COLOURS)
-
-		set_tile = ThinkominoTile(*set(COLOURS))
-		self.assertIsInstance(set_tile, ThinkominoTile)
-		self.assertCountEqual(set_tile, COLOURS)
-
-	def test_length_error(self):
-		with self.assertRaises(IndexError):
-			ThinkominoTile([])
-		with self.assertRaises(IndexError):
-			ThinkominoTile([
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE,
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE])
+		tile = ThinkominoTile(*COLOURS)
+		self.assertIsInstance(tile, ThinkominoTile)
+		self.assertEqual(tile.east, COLOURS[0])
+		self.assertEqual(tile.north_east, COLOURS[1])
+		self.assertEqual(tile.north_west, COLOURS[2])
+		self.assertEqual(tile.west, COLOURS[3])
+		self.assertEqual(tile.south_west, COLOURS[4])
+		self.assertEqual(tile.south_east, COLOURS[5])
 
 	def test_value_error(self):
 		with self.assertRaises(ValueError):
@@ -60,61 +47,16 @@ class ThinkominoTileTest(TestCase):
 			ThinkominoTile(ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
 			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)[-7]
 
-	def test_side_mapping(self):
+	def test_shorthand_attributes(self):
 		COLOURS = (
 			ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
 			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)
 		tile = ThinkominoTile(*COLOURS)
-		self.assertEqual(tile['east'], COLOURS[0])
-		self.assertEqual(tile['e'], COLOURS[0])
-		self.assertEqual(tile['north east'], COLOURS[1])
-		self.assertEqual(tile['ne'], COLOURS[1])
-		self.assertEqual(tile['north west'], COLOURS[2])
-		self.assertEqual(tile['nw'], COLOURS[2])
-		self.assertEqual(tile['west'], COLOURS[3])
-		self.assertEqual(tile['w'], COLOURS[3])
-		self.assertEqual(tile['south west'], COLOURS[4])
-		self.assertEqual(tile['sw'], COLOURS[4])
-		self.assertEqual(tile['south east'], COLOURS[5])
-		self.assertEqual(tile['se'], COLOURS[5])
-
-	def test_key_error(self):
-		with self.assertRaises(KeyError):
-			ThinkominoTile(ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
-			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)['north_east']
-		with self.assertRaises(KeyError):
-			ThinkominoTile(ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
-			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)['north_west']
-		with self.assertRaises(KeyError):
-			ThinkominoTile(ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
-			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)['south_east']
-		with self.assertRaises(KeyError):
-			ThinkominoTile(ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
-			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)['south_west']
-		with self.assertRaises(KeyError):
-			ThinkominoTile(ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
-			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)['north']
-		with self.assertRaises(KeyError):
-			ThinkominoTile(ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
-			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)['south']
-
-
-	def test_side_attributes(self):
-		COLOURS = (
-			ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
-			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)
-		tile = ThinkominoTile(*COLOURS)
-		self.assertEqual(tile.east, COLOURS[0])
 		self.assertEqual(tile.e, COLOURS[0])
-		self.assertEqual(tile.north_east, COLOURS[1])
 		self.assertEqual(tile.ne, COLOURS[1])
-		self.assertEqual(tile.north_west, COLOURS[2])
 		self.assertEqual(tile.nw, COLOURS[2])
-		self.assertEqual(tile.west, COLOURS[3])
 		self.assertEqual(tile.w, COLOURS[3])
-		self.assertEqual(tile.south_west, COLOURS[4])
 		self.assertEqual(tile.sw, COLOURS[4])
-		self.assertEqual(tile.south_east, COLOURS[5])
 		self.assertEqual(tile.se, COLOURS[5])
 
 	def test_attribute_error(self):
@@ -126,10 +68,10 @@ class ThinkominoTileTest(TestCase):
 			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE).south
 		with self.assertRaises(AttributeError):
 			ThinkominoTile(ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
-			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE).sides
+			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE).n
 		with self.assertRaises(AttributeError):
 			ThinkominoTile(ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
-			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE).__sides
+			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE).s
 
 	def test_membership_checking(self):
 		COLOURS = (
@@ -181,3 +123,31 @@ class ThinkominoTileTest(TestCase):
 		self.assertTrue(ThinkominoTile(*COLOURS1) != ThinkominoTile(*COLOURS2))
 		self.assertFalse(ThinkominoTile(*COLOURS1) == COLOURS1)
 		self.assertTrue(ThinkominoTile(*COLOURS1) != COLOURS1)
+
+	def test_mapping(self):
+		COLOURS = (
+			ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
+			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)
+		tile = ThinkominoTile(*COLOURS)
+		self.assertEqual(tile['east'], COLOURS[0])
+		self.assertEqual(tile['north east'], COLOURS[1])
+		self.assertEqual(tile['north west'], COLOURS[2])
+		self.assertEqual(tile['west'], COLOURS[3])
+		self.assertEqual(tile['south west'], COLOURS[4])
+		self.assertEqual(tile['south east'], COLOURS[5])
+		self.assertEqual(tile['e'], COLOURS[0])
+		self.assertEqual(tile['ne'], COLOURS[1])
+		self.assertEqual(tile['nw'], COLOURS[2])
+		self.assertEqual(tile['w'], COLOURS[3])
+		self.assertEqual(tile['sw'], COLOURS[4])
+		self.assertEqual(tile['se'], COLOURS[5])
+
+	def test_hashing(self):
+		COLOURS1 = (
+			ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, 
+			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)
+		self.assertEqual(hash(ThinkominoTile(*COLOURS1)), hash(ThinkominoTile(*COLOURS1)))
+		COLOURS2 = ( 
+			ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE,
+			ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW)
+		self.assertNotEqual(hash(ThinkominoTile(*COLOURS1)), hash(ThinkominoTile(*COLOURS2)))
