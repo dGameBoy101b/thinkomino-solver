@@ -24,9 +24,10 @@ if __name__ == '__main__':
 	from thinkomino_colour import ThinkominoColour
 	screen = Screen()
 	screen.delay(0)
+	screen.title('Thinkomino Board Drawer Test')
 	turtle = RawTurtle(screen)
 	turtle.speed(0)
 	TILE = ThinkominoTile(ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)
 	BOARD = ThinkominoBoard(TILE,TILE,TILE,TILE,TILE,TILE)
 	draw_board(BOARD, turtle, 100)
-	pass
+	screen.exitonclick()

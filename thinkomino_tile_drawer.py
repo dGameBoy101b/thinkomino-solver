@@ -33,8 +33,9 @@ if __name__ == '__main__':
 	from turtle import Screen
 	screen = Screen()
 	screen.delay(0)
+	screen.title('Thinkomino Tile Drawer Test')
 	turtle = RawTurtle(screen)
 	turtle.speed(0)
 	TILE = ThinkominoTile(ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW, ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE)
 	draw_tile(TILE, turtle, 100)
-	pass
+	screen.exitonclick()
