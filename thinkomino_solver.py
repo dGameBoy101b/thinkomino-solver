@@ -111,11 +111,13 @@ class ThinkominoSolver:
 			self.logger.info('No solution found')
 
 if __name__ == '__main__':
-	#parse command line arguments
 	from argparse import ArgumentParser
 	from logging.config import dictConfig
 	from xml.etree.ElementTree import parse, XMLParser
 	from dictionary_xml_builder import DictionaryXMLBuilder
+	from turtle import Screen, RawTurtle
+	from thinkomino_board_drawer import draw_board
+	#parse command line arguments
 	TILES_CSV_ARG_NAME = 'tiles_csv'
 	SOLVER_PROCESSES_ARG_NAME = 'solver_processes'
 	LOGGER_XML_FILE_ARG_NAME = 'logger_config_file'
@@ -128,5 +130,10 @@ if __name__ == '__main__':
 	solver = ThinkominoSolver(args[LOGGER_XML_FILE_ARG_NAME])
 	solution = solver.main(tiles_csv=args[TILES_CSV_ARG_NAME], solver_processes=args[SOLVER_PROCESSES_ARG_NAME])
 	#display solution
+	screen = Screen()
+	screen.delay(0)
 	if solution is not None:
-		pass #todo
+		turtle = RawTurtle(screen, visible=False)
+		turtle.speed(0)
+		draw_board(solution, turtle)
+	screen.exitonclick()
