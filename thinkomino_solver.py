@@ -114,13 +114,15 @@ if __name__ == '__main__':
 	#parse command line arguments
 	from argparse import ArgumentParser
 	from logging.config import dictConfig
+	from xml.etree.ElementTree import parse, XMLParser
+	from dictionary_xml_builder import DictionaryXMLBuilder
 	TILES_CSV_ARG_NAME = 'tiles_csv'
 	SOLVER_PROCESSES_ARG_NAME = 'solver_processes'
 	LOGGER_XML_FILE_ARG_NAME = 'logger_config_file'
 	parser = ArgumentParser(description='Solve a Thinkomino puzzle')
 	parser.add_argument(TILES_CSV_ARG_NAME, required=True)
 	parser.add_argument(SOLVER_PROCESSES_ARG_NAME, type=int, default=1)
-	parser.add_argument(LOGGER_XML_FILE_ARG_NAME, type=lambda file: dictConfig(file), required=False)
+	parser.add_argument(LOGGER_XML_FILE_ARG_NAME, type=lambda file: dictConfig(parse(file, XMLParser(target=DictionaryXMLBuilder()))), required=False)
 	args = parser.parse_args()
 	#run solver
 	solver = ThinkominoSolver(args[LOGGER_XML_FILE_ARG_NAME])
