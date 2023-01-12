@@ -39,8 +39,11 @@ class ThinkominoSolver:
 			#generate board
 			for order in permute_list(tiles):
 				def permute_rotations(tiles: list[ThinkominoTile]) -> list[ThinkominoTile]:
+					if len(tiles) < 2:
+						yield tiles
+						return
 					for rotation in rotate_list(tiles[0]):
-						for permutation in permute_rotations(tiles[0:]):
+						for permutation in permute_rotations(tiles[1:]):
 							yield [ThinkominoTile(*rotation)] + permutation
 				for state in permute_rotations(order):
 					board = ThinkominoBoard(*state)
@@ -57,7 +60,7 @@ class ThinkominoSolver:
 				self.logger.error(f'Failed to generate boards: {x!r}')
 			raise x
 
-	async def solve_board(self, board: ThinkominoBoard)->bool:
+	def solve_board(self, board: ThinkominoBoard)->bool:
 		id = hash(board)
 		#log start
 		if self.logger is not None:
@@ -95,8 +98,9 @@ class ThinkominoSolver:
 						board = None
 				#start solver process
 				if board is not None:
-					solvers[board] = pool.apply_async(self.solve_board(board))
+					solvers[board] = pool.apply_async(self.solve_board, [board])
 				#check solver processes
+				to_delete = set()
 				for key in solvers:
 					if solvers[key].ready():
 						if solvers[key].get():
@@ -105,7 +109,14 @@ class ThinkominoSolver:
 								self.logger.debug(f'Solution found: {key!r}')
 								self.logger.info(f'Solution found: {hash(key)}')
 							return key
-						del solvers[key]
+						to_delete.add(key)
+				#delete failed solutions
+				for key in to_delete:
+					#log failed solution
+					if self.logger is not None:
+						self.logger.debug(f'Solution discarded: {key!r}')
+						self.logger.info(f'Solution discarded: {hash(key)}')
+					del solvers[key]
 		#log failed solution
 		if self.logger is not None:
 			self.logger.info('No solution found')
