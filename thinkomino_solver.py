@@ -112,12 +112,9 @@ class ThinkominoSolver:
 
 if __name__ == '__main__':
 	from argparse import ArgumentParser
-	from logging.config import dictConfig
-	from xml.etree.ElementTree import fromstring, XMLParser
-	from dictionary_xml_builder import DictionaryXMLBuilder
 	from turtle import Screen, RawTurtle
 	from thinkomino_board_drawer import draw_board
-	from re import compile
+	from logger_xml_config import configXML
 	#parse command line arguments
 	TILES_CSV_ARG_NAME = 'tiles_csv'
 	SOLVER_PROCESSES_ARG_NAME = 'solver_processes'
@@ -127,15 +124,9 @@ if __name__ == '__main__':
 	parser.add_argument(SOLVER_PROCESSES_ARG_NAME, type=int, default=1, help='The maximum number of processes that can be used to solve generated boards')
 	parser.add_argument(LOGGER_XML_FILE_ARG_NAME, type=str, default=None, help='Path to the xml file used to configure a logger')
 	args = vars(parser.parse_args())
-	#create logger
-	logger = None
+	#config logger
 	if args[LOGGER_XML_FILE_ARG_NAME] is not None:
-		with open(args[LOGGER_XML_FILE_ARG_NAME],'rt') as file:
-			xml_str = compile('>\s+<').sub('><', file.read())
-		xml_dict = fromstring(xml_str, XMLParser(target=DictionaryXMLBuilder()))
-		logger_config = xml_dict[next(iter(xml_dict))]
-		logger_config['version'] = int(logger_config['version'])
-		dictConfig(logger_config)
+		configXML(args[LOGGER_XML_FILE_ARG_NAME])
 	#run solver
 	solver = ThinkominoSolver()
 	solution = solver.main(tiles_csv=args[TILES_CSV_ARG_NAME], solver_processes=args[SOLVER_PROCESSES_ARG_NAME])
