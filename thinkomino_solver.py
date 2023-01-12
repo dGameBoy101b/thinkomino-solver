@@ -6,12 +6,11 @@ from csv import reader
 from list_permuter import permute_list
 from list_rotator import rotate_list
 from multiprocessing.pool import Pool
+from logging import getLogger
 
 class ThinkominoSolver:
-	def __init__(self, logger: Logger = None):
-		if logger is not None and not isinstance(logger, Logger):
-			raise TypeError('logger must be a Logger or None')
-		self.logger = logger
+	def __init__(self):
+		self.logger = getLogger(__name__)
 
 	def load_tiles_csv(self, path: str) -> list[ThinkominoTile]:
 		#log start
@@ -20,7 +19,7 @@ class ThinkominoSolver:
 		try:
 			#load tiles from csv
 			file = open(path)
-			tiles = [ThinkominoTile(map(lambda colour: ThinkominoColour(colour), row)) for row in reader(file)]
+			tiles = [ThinkominoTile(*map(lambda colour: ThinkominoColour(colour), row)) for row in reader(file)]
 			#log end
 			if self.logger is not None:
 				self.logger.debug(f'Loaded tiles: {tiles!r}')
@@ -41,7 +40,8 @@ class ThinkominoSolver:
 			for order in permute_list(tiles):
 				def permute_rotations(tiles: list[ThinkominoTile]) -> list[ThinkominoTile]:
 					for rotation in rotate_list(tiles[0]):
-						yield [ThinkominoTile(rotation)] + permute_rotations(tiles[0:])
+						for permutation in permute_rotations(tiles[0:]):
+							yield [ThinkominoTile(*rotation)] + permutation
 				for state in permute_rotations(order):
 					board = ThinkominoBoard(*state)
 					#log generated board
@@ -113,21 +113,31 @@ class ThinkominoSolver:
 if __name__ == '__main__':
 	from argparse import ArgumentParser
 	from logging.config import dictConfig
-	from xml.etree.ElementTree import parse, XMLParser
+	from xml.etree.ElementTree import fromstring, XMLParser
 	from dictionary_xml_builder import DictionaryXMLBuilder
 	from turtle import Screen, RawTurtle
 	from thinkomino_board_drawer import draw_board
+	from re import compile
 	#parse command line arguments
 	TILES_CSV_ARG_NAME = 'tiles_csv'
 	SOLVER_PROCESSES_ARG_NAME = 'solver_processes'
 	LOGGER_XML_FILE_ARG_NAME = 'logger_config_file'
 	parser = ArgumentParser(description='Solve a Thinkomino puzzle')
-	parser.add_argument(TILES_CSV_ARG_NAME, required=True)
-	parser.add_argument(SOLVER_PROCESSES_ARG_NAME, type=int, default=1)
-	parser.add_argument(LOGGER_XML_FILE_ARG_NAME, type=lambda file: dictConfig(parse(file, XMLParser(target=DictionaryXMLBuilder()))), required=False)
-	args = parser.parse_args()
+	parser.add_argument(TILES_CSV_ARG_NAME, type=str, help='Path to the csv file storing the available tiles')
+	parser.add_argument(SOLVER_PROCESSES_ARG_NAME, type=int, default=1, help='The maximum number of processes that can be used to solve generated boards')
+	parser.add_argument(LOGGER_XML_FILE_ARG_NAME, type=str, default=None, help='Path to the xml file used to configure a logger')
+	args = vars(parser.parse_args())
+	#create logger
+	logger = None
+	if args[LOGGER_XML_FILE_ARG_NAME] is not None:
+		with open(args[LOGGER_XML_FILE_ARG_NAME],'rt') as file:
+			xml_str = compile('>\s+<').sub('><', file.read())
+		xml_dict = fromstring(xml_str, XMLParser(target=DictionaryXMLBuilder()))
+		logger_config = xml_dict[next(iter(xml_dict))]
+		logger_config['version'] = int(logger_config['version'])
+		dictConfig(logger_config)
 	#run solver
-	solver = ThinkominoSolver(args[LOGGER_XML_FILE_ARG_NAME])
+	solver = ThinkominoSolver()
 	solution = solver.main(tiles_csv=args[TILES_CSV_ARG_NAME], solver_processes=args[SOLVER_PROCESSES_ARG_NAME])
 	#display solution
 	screen = Screen()

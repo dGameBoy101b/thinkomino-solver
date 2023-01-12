@@ -10,22 +10,29 @@
 	</formatters>
 	<handlers>
 		<debug_file>
-			<class>logging.handlers.FileHandler</class>
+			<class>logging.FileHandler</class>
 			<formatter>default</formatter>
 			<level>DEBUG</level>
 			<filename>debug_log.log</filename>
 		</debug_file>
 		<info_console>
-			<class>logging.handlers.StreamHandler</class>
+			<class>logging.StreamHandler</class>
 			<formatter>default</formatter>
 			<level>INFO</level>
 			<stream>sys.stdout</stream>
 		</info_console>
 		<error_console>
-			<class>logging.handlers.StreamHandler</class>
+			<class>logging.StreamHandler</class>
 			<formatter>default</formatter>
 			<level>ERROR</level>
 			<stream>sys.stderr</stream>
 		</error_console>
 	</handlers>
+	<root>
+		<handlers>
+			<debug_file/>
+			<info_console/>
+			<error_console/>
+		</handlers>
+	</root>
 </logger>
