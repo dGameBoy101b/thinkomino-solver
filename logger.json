@@ -28,6 +28,7 @@
 		}
 	},
 	"root":{
+		"level":"DEBUG",
 		"handlers":[
 			"debug_file",
 			"info_console",

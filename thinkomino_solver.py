@@ -127,6 +127,7 @@ if __name__ == '__main__':
 	from thinkomino_board_drawer import draw_board
 	from logging.config import dictConfig
 	from json import load
+	from sys import stdin, stdout, stderr
 	#parse command line arguments
 	TILES_CSV_ARG_NAME = 'tiles_csv'
 	SOLVER_PROCESSES_ARG_NAME = 'solver_processes'
@@ -137,9 +138,19 @@ if __name__ == '__main__':
 	parser.add_argument(LOGGER_JSON_FILE_ARG_NAME, type=str, default=None, help='Path to the json file used to configure a logger')
 	args = vars(parser.parse_args())
 	#config logger
+	def cast_std_streams(json_data: dict) -> dict:
+		CLASS_KEY = 'class'
+		STREAM_KEY = 'stream'
+		STREAM_CAST_MAP = {
+			'sys.stdin': stdin,
+			'sys.stdout': stdout,
+			'sys.stderr': stderr}
+		if CLASS_KEY in json_data and json_data[CLASS_KEY] == 'logging.StreamHandler' and STREAM_KEY in json_data and json_data[STREAM_KEY] in STREAM_CAST_MAP:
+			json_data[STREAM_KEY] = STREAM_CAST_MAP[json_data[STREAM_KEY]]
+		return json_data
 	if args[LOGGER_JSON_FILE_ARG_NAME] is not None:
 		with open(args[LOGGER_JSON_FILE_ARG_NAME], 'rt') as file:
-			dictConfig(load(file))
+			dictConfig(load(file, object_hook=cast_std_streams))
 	#run solver
 	solver = ThinkominoSolver()
 	solution = solver.main(tiles_csv=args[TILES_CSV_ARG_NAME], solver_processes=args[SOLVER_PROCESSES_ARG_NAME])
