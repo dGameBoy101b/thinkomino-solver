@@ -114,19 +114,21 @@ if __name__ == '__main__':
 	from argparse import ArgumentParser
 	from turtle import Screen, RawTurtle
 	from thinkomino_board_drawer import draw_board
-	from logger_xml_config import configXML
+	from logging.config import dictConfig
+	from json import load
 	#parse command line arguments
 	TILES_CSV_ARG_NAME = 'tiles_csv'
 	SOLVER_PROCESSES_ARG_NAME = 'solver_processes'
-	LOGGER_XML_FILE_ARG_NAME = 'logger_config_file'
+	LOGGER_JSON_FILE_ARG_NAME = 'logger_config_file'
 	parser = ArgumentParser(description='Solve a Thinkomino puzzle')
 	parser.add_argument(TILES_CSV_ARG_NAME, type=str, help='Path to the csv file storing the available tiles')
 	parser.add_argument(SOLVER_PROCESSES_ARG_NAME, type=int, default=1, help='The maximum number of processes that can be used to solve generated boards')
-	parser.add_argument(LOGGER_XML_FILE_ARG_NAME, type=str, default=None, help='Path to the xml file used to configure a logger')
+	parser.add_argument(LOGGER_JSON_FILE_ARG_NAME, type=str, default=None, help='Path to the json file used to configure a logger')
 	args = vars(parser.parse_args())
 	#config logger
-	if args[LOGGER_XML_FILE_ARG_NAME] is not None:
-		configXML(args[LOGGER_XML_FILE_ARG_NAME])
+	if args[LOGGER_JSON_FILE_ARG_NAME] is not None:
+		with open(args[LOGGER_JSON_FILE_ARG_NAME], 'rt') as file:
+			dictConfig(load(file))
 	#run solver
 	solver = ThinkominoSolver()
 	solution = solver.main(tiles_csv=args[TILES_CSV_ARG_NAME], solver_processes=args[SOLVER_PROCESSES_ARG_NAME])

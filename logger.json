@@ -1,0 +1,38 @@
+
+{
+	"version": 1,
+	"formatters":{
+		"default":{
+			"format": "[%(asctime)s] %(filename)s.%(funcName)s:%(lineno)d %(levelname)s: %(message)s",
+			"datefmt": "%Y-%m-%d %H:%M:%S.uuu",
+			"style": "%"
+		}
+	},
+	"handlers":{
+		"debug_file":{
+			"class":"logging.FileHandler",
+			"formatter":"default",
+			"level":"DEBUG",
+			"filename":"debug_log.log"
+		},
+		"info_console":{
+			"class":"logging.StreamHandler",
+			"formatter":"default",
+			"level":"INFO",
+			"stream":"sys.stdout"
+		},
+		"error_console":{
+			"class":"logging.StreamHandler",
+			"formatter":"default",
+			"level":"ERROR",
+			"stream":"sys.stderr"
+		}
+	},
+	"root":{
+		"handlers":[
+			"debug_file",
+			"info_console",
+			"error_console"
+		]
+	}
+}
