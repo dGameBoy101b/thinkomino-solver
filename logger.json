@@ -9,10 +9,12 @@
 	},
 	"handlers":{
 		"debug_file":{
-			"class":"logging.FileHandler",
+			"class":"logging.handlers.RotatingFileHandler",
 			"formatter":"default",
 			"level":"DEBUG",
-			"filename":"debug_log.log"
+			"filename":"logs/debug.log",
+			"backupCount":20,
+			"maxBytes":4000000
 		},
 		"info_console":{
 			"class":"logging.StreamHandler",

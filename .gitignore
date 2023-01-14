@@ -153,3 +153,7 @@ cython_debug/
 
 # VS Code meta
 .vscode/
+
+#rotating logs
+*.log
+*.log.*
