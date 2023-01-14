@@ -1,12 +1,9 @@
 from thinkomino_tile import ThinkominoTile
-from thinkomino_colour import ThinkominoColour
 from thinkomino_board import ThinkominoBoard
-from logging import Logger
-from csv import reader
-from list_permuter import permute_list
-from list_rotator import rotate_list
 from multiprocessing.pool import Pool
 from logging import getLogger
+from thinkomino_board_generator import generate_boards
+from thinkomino_tiles_csv_loader import load_tiles_csv
 
 class ThinkominoSolver:
 	def __init__(self):
@@ -18,8 +15,7 @@ class ThinkominoSolver:
 			self.logger.info(f'Loading tiles from {path!r}...')
 		try:
 			#load tiles from csv
-			file = open(path)
-			tiles = [ThinkominoTile(*map(lambda colour: ThinkominoColour(colour), row)) for row in reader(file)]
+			tiles = load_tiles_csv(path)
 			#log end
 			if self.logger is not None:
 				self.logger.debug(f'Loaded tiles: {tiles!r}')
@@ -37,20 +33,11 @@ class ThinkominoSolver:
 			self.logger.info('Generating boards...')
 		try:
 			#generate board
-			for order in permute_list(tiles):
-				def permute_rotations(tiles: list[ThinkominoTile]) -> list[ThinkominoTile]:
-					if len(tiles) < 2:
-						yield tiles
-						return
-					for rotation in rotate_list(tiles[0]):
-						for permutation in permute_rotations(tiles[1:]):
-							yield [ThinkominoTile(*rotation)] + permutation
-				for state in permute_rotations(order):
-					board = ThinkominoBoard(*state)
-					#log generated board
-					if self.logger is not None:
-						self.logger.debug(f'Generated board: {board!r}')
-					yield board
+			for board in generate_boards(tiles):
+				#log generated board
+				if self.logger is not None:
+					self.logger.debug(f'Generated board: {board!r}')
+				yield board
 			#log end
 			if self.logger is not None:
 				self.logger.info('Finished generating boards')
@@ -132,10 +119,12 @@ if __name__ == '__main__':
 	TILES_CSV_ARG_NAME = 'tiles_csv'
 	SOLVER_PROCESSES_ARG_NAME = 'solver_processes'
 	LOGGER_JSON_FILE_ARG_NAME = 'logger_config_file'
+	SNAPSHOT_FOLDER_ARG_NAME = 'snapshot_folder'
 	parser = ArgumentParser(description='Solve a Thinkomino puzzle')
 	parser.add_argument(TILES_CSV_ARG_NAME, type=str, help='Path to the csv file storing the available tiles')
 	parser.add_argument(SOLVER_PROCESSES_ARG_NAME, type=int, default=1, help='The maximum number of processes that can be used to solve generated boards')
 	parser.add_argument(LOGGER_JSON_FILE_ARG_NAME, type=str, default=None, help='Path to the json file used to configure a logger')
+	parser.add_argument(SNAPSHOT_FOLDER_ARG_NAME, type=str, default=None, help='Path to the folder used to export solution snapshots to')
 	args = vars(parser.parse_args())
 	#config logger
 	def cast_std_streams(json_data: dict) -> dict:
