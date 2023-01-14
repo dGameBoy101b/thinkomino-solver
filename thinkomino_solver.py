@@ -9,13 +9,15 @@ class ThinkominoSolver:
 	def __init__(self):
 		self.logger = getLogger(__name__)
 
-	def load_tiles_csv(self, path: str) -> list[ThinkominoTile]:
+	def _load_tiles_csv(self, path: str) -> list[ThinkominoTile]:
 		#log start
 		if self.logger is not None:
 			self.logger.info(f'Loading tiles from {path!r}...')
 		try:
 			#load tiles from csv
-			tiles = load_tiles_csv(path)
+			tiles = None
+			with open(path, 'rt') as file:
+				tiles = load_tiles_csv(file)
 			#log end
 			if self.logger is not None:
 				self.logger.debug(f'Loaded tiles: {tiles!r}')
@@ -27,7 +29,7 @@ class ThinkominoSolver:
 				self.logger.error(f'Failed to load tiles: {x!r}')
 			raise x
 
-	def generate_boards(self, tiles: list[ThinkominoTile]) -> ThinkominoBoard:
+	def _generate_boards(self, tiles: list[ThinkominoTile]) -> ThinkominoBoard:
 		#log start
 		if self.logger is not None:
 			self.logger.info('Generating boards...')
@@ -47,7 +49,7 @@ class ThinkominoSolver:
 				self.logger.error(f'Failed to generate boards: {x!r}')
 			raise x
 
-	def solve_board(self, board: ThinkominoBoard)->bool:
+	def _solve_board(self, board: ThinkominoBoard)->bool:
 		id = hash(board)
 		#log start
 		if self.logger is not None:
@@ -66,14 +68,14 @@ class ThinkominoSolver:
 				self.logger.error(f'Failed to solve board {id}')
 			raise x
 
-	def main(self, tiles_csv: str = None, tiles: list[ThinkominoTile] = None, solver_processes: int = 1) -> ThinkominoBoard:
+	def __call__(self, tiles_csv: str = None, tiles: list[ThinkominoTile] = None, solver_processes: int = 1) -> ThinkominoBoard:
 		#load tiles
 		if tiles_csv is not None:
-			tiles = self.load_tiles_csv(tiles_csv)
+			tiles = self._load_tiles_csv(tiles_csv)
 		#solve
 		solvers = dict()
 		with Pool(solver_processes) as pool:
-			generator = self.generate_boards(tiles)
+			generator = self._generate_boards(tiles)
 			board = None
 			while generator is not None or len(solvers) > 0:
 				#generate next board
@@ -85,7 +87,7 @@ class ThinkominoSolver:
 						board = None
 				#start solver process
 				if board is not None:
-					solvers[board] = pool.apply_async(self.solve_board, [board])
+					solvers[board] = pool.apply_async(self._solve_board, [board])
 				#check solver processes
 				to_delete = set()
 				for key in solvers:
@@ -122,9 +124,9 @@ if __name__ == '__main__':
 	SNAPSHOT_FOLDER_ARG_NAME = 'snapshot_folder'
 	parser = ArgumentParser(description='Solve a Thinkomino puzzle')
 	parser.add_argument(TILES_CSV_ARG_NAME, type=str, help='Path to the csv file storing the available tiles')
-	parser.add_argument(SOLVER_PROCESSES_ARG_NAME, type=int, default=1, help='The maximum number of processes that can be used to solve generated boards')
-	parser.add_argument(LOGGER_JSON_FILE_ARG_NAME, type=str, default=None, help='Path to the json file used to configure a logger')
-	parser.add_argument(SNAPSHOT_FOLDER_ARG_NAME, type=str, default=None, help='Path to the folder used to export solution snapshots to')
+	parser.add_argument(SOLVER_PROCESSES_ARG_NAME, nargs='?', type=int, default=1, help='The maximum number of processes that can be used to solve generated boards')
+	parser.add_argument(LOGGER_JSON_FILE_ARG_NAME, nargs='?', type=str, default=None, help='Path to the json file used to configure a logger')
+	parser.add_argument(SNAPSHOT_FOLDER_ARG_NAME, nargs='?', type=str, default=None, help='Path to the folder used to export solution snapshots to')
 	args = vars(parser.parse_args())
 	#config logger
 	def cast_std_streams(json_data: dict) -> dict:
@@ -142,7 +144,7 @@ if __name__ == '__main__':
 			dictConfig(load(file, object_hook=cast_std_streams))
 	#run solver
 	solver = ThinkominoSolver()
-	solution = solver.main(tiles_csv=args[TILES_CSV_ARG_NAME], solver_processes=args[SOLVER_PROCESSES_ARG_NAME])
+	solution = solver(tiles_csv=args[TILES_CSV_ARG_NAME], solver_processes=args[SOLVER_PROCESSES_ARG_NAME])
 	#display solution
 	screen = Screen()
 	screen.delay(0)
