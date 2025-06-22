@@ -14,20 +14,22 @@ class ThinkominoBoard:
 		self.south_east = south_east
 		self.north_east = north_east
 
+	ADJACENCIES = frozenset({
+		(('n','sw'), ('nw','ne')),
+		(('n','se'), ('ne','nw')),
+		(('nw','e'), ('ne','w')),
+		(('nw','sw'), ('sw','ne')),
+		(('nw','w'), ('s','e')),
+		(('ne','sw'), ('s','ne')),
+		(('ne','se'), ('se','nw')),
+		(('sw','e'), ('s','w')),
+		(('s','e'), ('se','w'))})
+
 	def is_solved(self)->bool:
 		for tile in self:
 			if tile is None:
 				return False
-		for adjacency in {
-			(('n','sw'), ('nw','ne')),
-			(('n','se'), ('ne','nw')),
-			(('nw','e'), ('ne','w')),
-			(('nw','sw'), ('sw','ne')),
-			(('nw','w'), ('s','e')),
-			(('ne','sw'), ('s','ne')),
-			(('ne','se'), ('se','nw')),
-			(('sw','e'), ('s','w')),
-			(('s','e'), ('se','w'))}:
+		for adjacency in ThinkominoBoard.ADJACENCIES:
 			if self[adjacency[0][0]][adjacency[0][1]] != self[adjacency[1][0]][adjacency[1][1]]:
 				return False
 		return True
