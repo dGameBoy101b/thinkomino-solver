@@ -233,16 +233,22 @@ class ThinkominoBoardTest(TestCase):
 		board = ThinkominoBoard(*TILES)
 		self.assertEqual(board['north'], TILES[0])
 		self.assertEqual(board['n'], TILES[0])
+		self.assertEqual(board[ThinkominoBoard.Direction.North], TILES[0])
 		self.assertEqual(board['north west'], TILES[1])
 		self.assertEqual(board['nw'], TILES[1])
+		self.assertEqual(board[ThinkominoBoard.Direction.NorthWest], TILES[1])
 		self.assertEqual(board['south west'], TILES[2])
 		self.assertEqual(board['sw'], TILES[2])
+		self.assertEqual(board[ThinkominoBoard.Direction.SouthWest], TILES[2])
 		self.assertEqual(board['south'], TILES[3])
 		self.assertEqual(board['s'], TILES[3])
+		self.assertEqual(board[ThinkominoBoard.Direction.South], TILES[3])
 		self.assertEqual(board['south east'], TILES[4])
 		self.assertEqual(board['se'], TILES[4])
+		self.assertEqual(board[ThinkominoBoard.Direction.SouthEast], TILES[4])
 		self.assertEqual(board['north east'], TILES[5])
 		self.assertEqual(board['ne'], TILES[5])
+		self.assertEqual(board[ThinkominoBoard.Direction.NorthEast], TILES[5])
 
 	def test_key_error(self):
 		TILES = (

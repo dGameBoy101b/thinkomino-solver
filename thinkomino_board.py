@@ -1,7 +1,15 @@
+from enum import StrEnum
 from thinkomino_tile import ThinkominoTile
 
 class ThinkominoBoard:
 
+	class Direction(StrEnum):
+		North = 'n'
+		NorthWest = 'nw'
+		SouthWest = 'sw'
+		South = 's'
+		SouthEast = 'se'
+		NorthEast = 'ne'
 
 	def __init__(self, north: ThinkominoTile = None, north_west: ThinkominoTile = None, south_west: ThinkominoTile = None, south: ThinkominoTile = None, south_east: ThinkominoTile = None, north_east: ThinkominoTile = None):
 		for tile in (north, north_west, south_west, south, south_east, north_east):
@@ -15,15 +23,15 @@ class ThinkominoBoard:
 		self.north_east = north_east
 
 	ADJACENCIES = frozenset({
-		(('n','sw'), ('nw','ne')),
-		(('n','se'), ('ne','nw')),
-		(('nw','e'), ('ne','w')),
-		(('nw','sw'), ('sw','ne')),
-		(('nw','w'), ('s','e')),
-		(('ne','sw'), ('s','ne')),
-		(('ne','se'), ('se','nw')),
-		(('sw','e'), ('s','w')),
-		(('s','e'), ('se','w'))})
+		((Direction.North,ThinkominoTile.Direction.SouthWest), (Direction.NorthWest,ThinkominoTile.Direction.NorthEast)),
+		((Direction.North,ThinkominoTile.Direction.SouthEast), (Direction.NorthEast,ThinkominoTile.Direction.NorthWest)),
+		((Direction.NorthWest,ThinkominoTile.Direction.East), (Direction.NorthEast,ThinkominoTile.Direction.West)),
+		((Direction.NorthWest,ThinkominoTile.Direction.SouthWest), (Direction.SouthWest,ThinkominoTile.Direction.NorthEast)),
+		((Direction.NorthWest,ThinkominoTile.Direction.West), (Direction.South,ThinkominoTile.Direction.East)),
+		((Direction.NorthEast,ThinkominoTile.Direction.SouthWest), (Direction.South,ThinkominoTile.Direction.NorthEast)),
+		((Direction.NorthEast,ThinkominoTile.Direction.SouthEast), (Direction.SouthEast,ThinkominoTile.Direction.NorthWest)),
+		((Direction.SouthWest,ThinkominoTile.Direction.East), (Direction.South,ThinkominoTile.Direction.West)),
+		((Direction.South,ThinkominoTile.Direction.East), (Direction.SouthEast,ThinkominoTile.Direction.West))})
 
 	def is_solved(self)->bool:
 		for tile in self:
@@ -61,7 +69,9 @@ class ThinkominoBoard:
 	def __iter__(self)->iter:
 		return iter((self.north, self.north_west, self.south_west, self.south, self.south_east, self.north_east))
 
-	def __getitem__(self, key)->ThinkominoTile:
+	def __getitem__(self, key:Direction|int)->ThinkominoTile:
+		if isinstance(key, ThinkominoBoard.Direction):
+			key = str(key)
 		if isinstance(key, str):
 			if key == 'north' or key == 'n':
 				return self.north
