@@ -1,6 +1,7 @@
 from typing import Iterable, Iterator
 from math import copysign
 
+'''Obsolete: Use Rotations iterator class instead'''
 def rotate_list(ls:list, step:int=1)->Iterator[tuple]:
 	return Rotations(ls, step)
 

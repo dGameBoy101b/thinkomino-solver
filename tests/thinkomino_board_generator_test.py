@@ -3,7 +3,7 @@ from thinkomino_board_generator import generate_boards
 from thinkomino_board import ThinkominoBoard
 from thinkomino_tile import ThinkominoTile
 from thinkomino_colour import ThinkominoColour
-from list_rotator import rotate_list
+from list_rotator import Rotations
 from list_permuter import permute_list
 
 class ThinkominoBoardGeneratorTest(TestCase):
@@ -36,7 +36,7 @@ class ThinkominoBoardGeneratorTest(TestCase):
 		raise AttributeError
 
 	def rotate_tile(self, tile_index: int, rotations: int = 1) -> None:
-		generator = rotate_list([colour for colour in self.tiles[tile_index]], rotations, 2)
+		generator = Rotations([colour for colour in self.tiles[tile_index]], rotations, 2)
 		next(generator)
 		self.tiles[tile_index] = ThinkominoTile(*next(generator))
 
