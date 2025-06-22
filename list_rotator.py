@@ -1,4 +1,5 @@
 from typing import Iterable, Iterator
+from math import copysign
 
 def rotate_list(ls:list, step:int=1)->Iterator[tuple]:
 	return Rotations(ls, step)
@@ -12,20 +13,16 @@ class Rotations(Iterator[Iterable]):
 			step = int(step)
 		except ValueError as x:
 			raise TypeError('step must be an integer', x)
-		if step < 1:
-			raise ValueError('step must be 1 or greater')
-		if len(self.iterable) > 0 and step > len(self.iterable):
-			raise ValueError(f'step must be lesser than or equal to the length of the iterable ({len(self.iterable)})')
-		self.step = step
+		self.step = 1 if len(self.iterable) < 1 else int(copysign(abs(step) % len(self.iterable), step))
 
 	def __len__(self) -> int:
-		if len(self.iterable) < 1:
+		if len(self.iterable) < 1 or self.step == 0:
 			return 1
 		if self.__len is None:
 			loops = 1
-			while len(self.iterable) * loops % self.step > 0:
+			while len(self.iterable) * loops % abs(self.step) > 0:
 				loops += 1
-			self.__len = len(self.iterable) * loops // self.step
+			self.__len = len(self.iterable) * loops // abs(self.step)
 		return self.__len
 
 	def __iter__(self):

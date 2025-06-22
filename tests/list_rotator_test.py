@@ -38,14 +38,6 @@ class ListRotatorTests(TestCase):
 		with self.assertRaises(TypeError):
 			next(rotate_list([1,2,3],'string'))
 
-	def test_step_value_error(self):
-		with self.assertRaises(ValueError):
-			next(rotate_list([1,2,3], 0))
-		with self.assertRaises(ValueError):
-			next(rotate_list([1,2,3], -1))
-		with self.assertRaises(ValueError):
-			next(rotate_list([1,2,3], 4))
-
 	def test_5_step_2(self):
 		rotator = rotate_list([1,2,3,4,5], 2)
 		self.assertEqual(len(rotator), 5)
@@ -62,5 +54,73 @@ class ListRotatorTests(TestCase):
 		self.assertEqual(len(rotator), 2)
 		self.assertSequenceEqual(next(rotator), [1,2,3,4])
 		self.assertSequenceEqual(next(rotator), [3,4,1,2])
+		with self.assertRaises(StopIteration):
+			next(rotator)
+
+	def test_3_step_0(self):
+		rotator = rotate_list([1,2,3], 0)
+		self.assertEqual(len(rotator), 1)
+		self.assertSequenceEqual(next(rotator), [1,2,3])
+		with self.assertRaises(StopIteration):
+			next(rotator)
+
+	def test_3_step_n1(self):
+		rotator = rotate_list([1,2,3], -1)
+		self.assertEqual(len(rotator), 3)
+		self.assertSequenceEqual(next(rotator), [1,2,3])
+		self.assertSequenceEqual(next(rotator), [2,3,1])
+		self.assertSequenceEqual(next(rotator), [3,1,2])
+		with self.assertRaises(StopIteration):
+			next(rotator)
+
+	def test_5_step_n2(self):
+		rotator = rotate_list([1,2,3,4,5], -2)
+		self.assertEqual(len(rotator), 5)
+		self.assertSequenceEqual(next(rotator), [1,2,3,4,5])
+		self.assertSequenceEqual(next(rotator), [3,4,5,1,2])
+		self.assertSequenceEqual(next(rotator), [5,1,2,3,4])
+		self.assertSequenceEqual(next(rotator), [2,3,4,5,1])
+		self.assertSequenceEqual(next(rotator), [4,5,1,2,3])
+		with self.assertRaises(StopIteration):
+			next(rotator)
+
+	def test_6_step_n2(self):
+		rotator = rotate_list([1,2,3,4,5,6], -2)
+		self.assertEqual(len(rotator), 3)
+		self.assertSequenceEqual(next(rotator), [1,2,3,4,5,6])
+		self.assertSequenceEqual(next(rotator), [3,4,5,6,1,2])
+		self.assertSequenceEqual(next(rotator), [5,6,1,2,3,4])
+		with self.assertRaises(StopIteration):
+			next(rotator)
+
+	def test_3_step_3(self):
+		rotator = rotate_list([1,2,3], 3)
+		self.assertEqual(len(rotator), 1)
+		self.assertSequenceEqual(next(rotator), [1,2,3])
+		with self.assertRaises(StopIteration):
+			next(rotator)
+
+	def test_3_step_n3(self):
+		rotator = rotate_list([1,2,3], -3)
+		self.assertEqual(len(rotator), 1)
+		self.assertSequenceEqual(next(rotator), [1,2,3])
+		with self.assertRaises(StopIteration):
+			next(rotator)
+
+	def test_3_step_4(self):
+		rotator = rotate_list([1,2,3], 4)
+		self.assertEqual(len(rotator), 3)
+		self.assertSequenceEqual(next(rotator), [1,2,3])
+		self.assertSequenceEqual(next(rotator), [3,1,2])
+		self.assertSequenceEqual(next(rotator), [2,3,1])
+		with self.assertRaises(StopIteration):
+			next(rotator)
+
+	def test_3_step_n4(self):
+		rotator = rotate_list([1,2,3], -4)
+		self.assertEqual(len(rotator), 3)
+		self.assertSequenceEqual(next(rotator), [1,2,3])
+		self.assertSequenceEqual(next(rotator), [2,3,1])
+		self.assertSequenceEqual(next(rotator), [3,1,2])
 		with self.assertRaises(StopIteration):
 			next(rotator)
