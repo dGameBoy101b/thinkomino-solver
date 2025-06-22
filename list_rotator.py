@@ -8,6 +8,20 @@ def rotate(iterable:tuple, step:int)->tuple:
 	index = -int(copysign(abs(step) % len(iterable), step))
 	return iterable[index:] + iterable[:index]
 
+def max_rotations(iterable:tuple, step:int)->int:
+	iterable_len = len(iterable)
+	if iterable_len < 1:
+		return 1
+	step = int(step)
+	abs_step = abs(step)
+	step = int(copysign(abs_step % iterable_len, step))
+	if step == 0:
+		return 1
+	loops = 1
+	while iterable_len * loops % abs_step > 0:
+		loops += 1
+	return iterable_len * loops // abs_step
+
 class Rotations(Iterator[Iterable]):
 	def __init__(self, iterable:Iterable, step:int=1):
 		self.iterable = tuple(iterable)
@@ -20,13 +34,8 @@ class Rotations(Iterator[Iterable]):
 		self.step = 1 if len(self.iterable) < 1 else int(copysign(abs(step) % len(self.iterable), step))
 
 	def __len__(self) -> int:
-		if len(self.iterable) < 1 or self.step == 0:
-			return 1
 		if self.__len is None:
-			loops = 1
-			while len(self.iterable) * loops % abs(self.step) > 0:
-				loops += 1
-			self.__len = len(self.iterable) * loops // abs(self.step)
+			self.__len = max_rotations(self.iterable, self.step)
 		return self.__len
 
 	def __iter__(self):
