@@ -14,7 +14,7 @@ SNAPSHOT_FOLDER_ARG_NAME = 'snapshot_folder'
 def arg_parser() -> ArgumentParser:
 	parser = ArgumentParser(description='Solve a Thinkomino puzzle')
 	parser.add_argument(TILES_CSV_ARG_NAME, type=str, help='Path to the csv file storing the available tiles')
-	parser.add_argument(SOLVER_PROCESSES_ARG_NAME, nargs='?', type=int, default=1, help='The maximum number of processes that can be used to solve generated boards')
+	parser.add_argument(SOLVER_PROCESSES_ARG_NAME, nargs='?', type=int, default=None, help='The maximum number of processes that can be used to solve generated boards')
 	parser.add_argument(LOGGER_JSON_FILE_ARG_NAME, nargs='?', type=str, default=None, help='Path to the json file used to configure a logger')
 	parser.add_argument(SNAPSHOT_FOLDER_ARG_NAME, nargs='?', type=str, default=None, help='Path to the folder used to export solution snapshots to')
 	return parser
