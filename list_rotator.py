@@ -1,9 +1,12 @@
 from typing import Iterable, Iterator
 from math import copysign
 
-'''Obsolete: Use Rotations iterator class instead'''
-def rotate_list(ls:list, step:int=1)->Iterator[tuple]:
-	return Rotations(ls, step)
+def rotate(iterable:tuple, step:int)->tuple:
+	iterable = tuple(iterable)
+	if len(iterable) < 2:
+		return iterable
+	index = int(copysign(abs(step) % len(iterable), step))
+	return iterable[index:] + iterable[:index]
 
 class Rotations(Iterator[Iterable]):
 	def __init__(self, iterable:Iterable, step:int=1):
@@ -32,9 +35,6 @@ class Rotations(Iterator[Iterable]):
 	def __next__(self) -> tuple:
 		if (self.__step_index >= len(self)):
 			raise StopIteration
-		if len(self.iterable) < 1:
-			self.__step_index += 1
-			return tuple()
-		index = -self.__step_index * self.step % len(self.iterable)
+		result = rotate(self.iterable, self.__step_index * self.step)
 		self.__step_index += 1
-		return self.iterable[index:] + self.iterable[:index]
+		return result
