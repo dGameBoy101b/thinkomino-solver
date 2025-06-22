@@ -33,7 +33,7 @@ def cast_std_streams(json_data: dict) -> dict:
 def main():
 	#parse command line arguments
 	parser = arg_parser()
-	args = vars(parser.parse_args())
+	args = parser.parse_args().__dict__
 	#config logger
 	if args[LOGGER_JSON_FILE_ARG_NAME] is not None:
 		with open(args[LOGGER_JSON_FILE_ARG_NAME], 'rt') as file:
