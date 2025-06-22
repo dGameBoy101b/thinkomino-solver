@@ -1,6 +1,6 @@
-from typing import Generator
+from typing import Iterator
 
-def permute_list(ls:list)->Generator[list]:
+def permute_list(ls:list)->Iterator[list]:
 	#empty/single special case
 	if len(ls) < 2:
 		yield ls

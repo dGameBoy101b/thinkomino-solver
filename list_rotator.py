@@ -1,6 +1,6 @@
-from typing import Generator
+from typing import Iterator
 
-def rotate_list(ls:list, step:int=1, iterations:int=None)->Generator[list]:
+def rotate_list(ls:list, step:int=1, iterations:int=None)->Iterator[list]:
 	#empty special case
 	if (len(ls) < 1):
 		return
