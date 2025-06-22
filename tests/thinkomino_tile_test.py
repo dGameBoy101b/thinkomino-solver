@@ -141,6 +141,12 @@ class ThinkominoTileTest(TestCase):
 		self.assertEqual(tile['w'], COLOURS[3])
 		self.assertEqual(tile['sw'], COLOURS[4])
 		self.assertEqual(tile['se'], COLOURS[5])
+		self.assertEqual(tile[ThinkominoTile.Direction.East], COLOURS[0])
+		self.assertEqual(tile[ThinkominoTile.Direction.NorthEast], COLOURS[1])
+		self.assertEqual(tile[ThinkominoTile.Direction.NorthWest], COLOURS[2])
+		self.assertEqual(tile[ThinkominoTile.Direction.West], COLOURS[3])
+		self.assertEqual(tile[ThinkominoTile.Direction.SouthWest], COLOURS[4])
+		self.assertEqual(tile[ThinkominoTile.Direction.SouthEast], COLOURS[5])
 
 	def test_hashing(self):
 		COLOURS1 = (

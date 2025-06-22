@@ -1,3 +1,4 @@
+from enum import StrEnum
 from thinkomino_colour import ThinkominoColour
 
 class ThinkominoTile:
@@ -26,6 +27,14 @@ class ThinkominoTile:
 
 	def __hash__(self)->int:
 		return hash((self.east, self.north_east, self.north_west, self.west, self.south_west, self.south_east))
+	
+	class Direction(StrEnum):
+		East = 'e'
+		NorthEast = 'ne'
+		NorthWest = 'nw'
+		West = 'w'
+		SouthWest = 'sw'
+		SouthEast = 'se'
 
 	def __getattr__(self, name: str)->ThinkominoColour:
 		if name == 'e':
@@ -51,7 +60,9 @@ class ThinkominoTile:
 	def __contains__(self, item)->bool:
 		return isinstance(item, ThinkominoColour)
 
-	def __getitem__(self, key)->ThinkominoColour:
+	def __getitem__(self, key: Direction|int)->ThinkominoColour:
+		if isinstance(key, ThinkominoTile.Direction):
+			str(key)
 		if isinstance(key, str):
 			if key == 'east' or key == 'e':
 				return self.east
