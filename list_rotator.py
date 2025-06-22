@@ -5,7 +5,7 @@ def rotate(iterable:tuple, step:int)->tuple:
 	iterable = tuple(iterable)
 	if len(iterable) < 2:
 		return iterable
-	index = int(copysign(abs(step) % len(iterable), step))
+	index = -int(copysign(abs(step) % len(iterable), step))
 	return iterable[index:] + iterable[:index]
 
 class Rotations(Iterator[Iterable]):
