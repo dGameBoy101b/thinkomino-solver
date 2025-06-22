@@ -1,22 +1,24 @@
 from typing import Iterable, Iterator
 from math import copysign
 
+def constrain_step(iterable:tuple, step:int)->int:
+	return 0 if len(iterable) < 1 else int(copysign(abs(step) % len(iterable), step))
+
 def rotate(iterable:tuple, step:int)->tuple:
 	iterable = tuple(iterable)
 	if len(iterable) < 2:
 		return iterable
-	index = -int(copysign(abs(step) % len(iterable), step))
+	index = -constrain_step(iterable, step)
 	return iterable[index:] + iterable[:index]
 
 def max_rotations(iterable:tuple, step:int)->int:
 	iterable_len = len(iterable)
 	if iterable_len < 1:
 		return 1
-	step = int(step)
-	abs_step = abs(step)
-	step = int(copysign(abs_step % iterable_len, step))
+	step = constrain_step(iterable, step)
 	if step == 0:
 		return 1
+	abs_step = abs(step)
 	loops = 1
 	while iterable_len * loops % abs_step > 0:
 		loops += 1
@@ -31,7 +33,7 @@ class Rotations(Iterator[Iterable]):
 			step = int(step)
 		except ValueError as x:
 			raise TypeError('step must be an integer', x)
-		self.step = 1 if len(self.iterable) < 1 else int(copysign(abs(step) % len(self.iterable), step))
+		self.step = constrain_step(self.iterable, step)
 
 	def __len__(self) -> int:
 		if self.__len is None:
