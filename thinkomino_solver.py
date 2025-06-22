@@ -12,64 +12,54 @@ class ThinkominoSolver:
 
 	def _load_tiles_csv(self, path: str) -> list[ThinkominoTile]:
 		#log start
-		if self.logger is not None:
-			self.logger.info(f'Loading tiles from {path!r}...')
+		self.logger.info(f'Loading tiles from {path!r}...')
 		try:
 			#load tiles from csv
 			tiles = None
 			with open(path, 'rt') as file:
 				tiles = load_tiles_csv(file)
 			#log end
-			if self.logger is not None:
-				self.logger.debug(f'Loaded tiles: {tiles!r}')
-				self.logger.info(f'Finished loading tiles from {path!r}')
+			self.logger.debug(f'Loaded tiles: {tiles!r}')
+			self.logger.info(f'Finished loading tiles from {path!r}')
 			return tiles
 		except Exception as x:
 			#log error
-			if self.logger is not None:
-				self.logger.error(f'Failed to load tiles: {x!r}')
+			self.logger.error(f'Failed to load tiles: {x!r}')
 			raise x
 
 	def _generate_boards(self, tiles: list[ThinkominoTile]) -> Iterator[ThinkominoBoard]:
 		#log start
-		if self.logger is not None:
-			self.logger.info('Generating boards...')
+		self.logger.info('Generating boards...')
 		try:
 			#generate board
 			for board in generate_boards(tiles):
 				#log generated board
-				if self.logger is not None:
-					self.logger.debug(f'Generated board: {board!r}')
+				self.logger.debug(f'Generated board: {board!r}')
 				yield board
 			#log end
-			if self.logger is not None:
-				self.logger.info('Finished generating boards')
+			self.logger.info('Finished generating boards')
 		except Exception as x:
 			#log error
-			if self.logger is not None:
-				self.logger.error(f'Failed to generate boards: {x!r}')
+			self.logger.error(f'Failed to generate boards: {x!r}')
 			raise x
 
 	def _solve_board(self, board: ThinkominoBoard)->bool:
 		id = hash(board)
 		#log start
-		if self.logger is not None:
-			self.logger.info(f'Solving board: {id}...')
-			self.logger.debug(f'Solving board: {id} = {board!r}')
+		self.logger.info(f'Solving board: {id}...')
+		self.logger.debug(f'Solving board: {id} = {board!r}')
 		try:
 			#solve
 			result = board.is_solved()
 			#log end
-			if self.logger is not None:
-				self.logger.debug(f'Is board {id} solved: {result}')
-				self.logger.info(f'Finished solving board: {id}')
+			self.logger.debug(f'Is board {id} solved: {result}')
+			self.logger.info(f'Finished solving board: {id}')
 			return result
 		except Exception as x:
-			if self.logger is not None:
-				self.logger.error(f'Failed to solve board {id}')
+			self.logger.error(f'Failed to solve board {id}', exc_info=x)
 			raise x
 
-	def __call__(self, tiles_csv: str = None, tiles: list[ThinkominoTile] = None, solver_processes: int = 1) -> ThinkominoBoard:
+	def __call__(self, tiles_csv: str = None, tiles: list[ThinkominoTile] = None, solver_processes: int = None) -> ThinkominoBoard:
 		#load tiles
 		if tiles_csv is not None:
 			tiles = self._load_tiles_csv(tiles_csv)
@@ -95,19 +85,16 @@ class ThinkominoSolver:
 					if solvers[key].ready():
 						if solvers[key].get():
 							#log successful solution
-							if self.logger is not None:
-								self.logger.debug(f'Solution found: {key!r}')
-								self.logger.info(f'Solution found: {hash(key)}')
+							self.logger.debug(f'Solution found: {key!r}')
+							self.logger.info(f'Solution found: {hash(key)}')
 							return key
 						to_delete.add(key)
 				#delete failed solutions
 				for key in to_delete:
 					#log failed solution
-					if self.logger is not None:
-						self.logger.debug(f'Solution discarded: {key!r}')
-						self.logger.info(f'Solution discarded: {hash(key)}')
+					self.logger.debug(f'Solution discarded: {key!r}')
+					self.logger.info(f'Solution discarded: {hash(key)}')
 					del solvers[key]
 		#log failed solution
-		if self.logger is not None:
-			self.logger.info('No solution found')
+		self.logger.info('No solution found')
 
