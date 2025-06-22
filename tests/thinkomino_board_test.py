@@ -2,22 +2,28 @@ from unittest import TestCase
 from thinkomino_board import ThinkominoBoard
 from thinkomino_tile import ThinkominoTile
 from thinkomino_colour import ThinkominoColour
+RED = ThinkominoColour.RED
+ORANGE = ThinkominoColour.ORANGE
+YELLOW = ThinkominoColour.YELLOW
+GREEN = ThinkominoColour.GREEN
+BLUE = ThinkominoColour.BLUE
+PURPLE = ThinkominoColour.PURPLE
 
 class ThinkominoBoardTest(TestCase):
 
 	def test_initialisation(self):
 		TILES = (
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			None,
 			None,
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			None)
 		board = ThinkominoBoard(*TILES)
 		self.assertIsInstance(board, ThinkominoBoard)
@@ -31,88 +37,88 @@ class ThinkominoBoardTest(TestCase):
 	def test_solve_check(self):
 		self.assertFalse(ThinkominoBoard(
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			None,
 			None,
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			None).is_solved())
 		self.assertFalse(ThinkominoBoard(
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW)).is_solved())
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW)).is_solved())
 
 	def test_representation(self):
 		TILES = (
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			None,
 			None,
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			None)
 		self.assertEqual(repr(ThinkominoBoard(*TILES)), f'ThinkominoBoard({", ".join(map(repr, TILES))!s})')
 
 	def test_equality(self):
 		TILES1 = (
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			None,
 			None,
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			None)
 		self.assertTrue(ThinkominoBoard(*TILES1) == ThinkominoBoard(*TILES1))
 		self.assertFalse(ThinkominoBoard(*TILES1) != ThinkominoBoard(*TILES1))
 		TILES2 = (
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW))
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW))
 		self.assertFalse(ThinkominoBoard(*TILES1) == ThinkominoBoard(*TILES2))
 		self.assertTrue(ThinkominoBoard(*TILES1) != ThinkominoBoard(*TILES2))
 		self.assertFalse(ThinkominoBoard(*TILES1) == TILES1)
@@ -121,52 +127,52 @@ class ThinkominoBoardTest(TestCase):
 	def test_hashing(self):
 		TILES1 = (
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			None,
 			None,
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			None)
 		self.assertEqual(hash(ThinkominoBoard(*TILES1)), hash(ThinkominoBoard(*TILES1)))
 		TILES2 = (
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW))
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW))
 		self.assertNotEqual(hash(ThinkominoBoard(*TILES1)), hash(ThinkominoBoard(*TILES2)))
 
 	def test_shorthand_attributes(self):
 		TILES = (
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			None,
 			None,
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			None)
 		board = ThinkominoBoard(*TILES)
 		self.assertEqual(board.n, TILES[0])
@@ -179,16 +185,16 @@ class ThinkominoBoardTest(TestCase):
 	def test_indexing(self):
 		TILES = (
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			None,
 			None,
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			None)
 		board = ThinkominoBoard(*TILES)
 		for index in range(-6, 6):
@@ -199,16 +205,16 @@ class ThinkominoBoardTest(TestCase):
 	def test_index_error(self):
 		TILES = (
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			None,
 			None,
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			None)
 		board = ThinkominoBoard(*TILES)
 		with self.assertRaises(IndexError):
@@ -219,16 +225,16 @@ class ThinkominoBoardTest(TestCase):
 	def test_mapping(self):
 		TILES = (
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			None,
 			None,
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			None)
 		board = ThinkominoBoard(*TILES)
 		self.assertEqual(board['north'], TILES[0])
@@ -253,16 +259,16 @@ class ThinkominoBoardTest(TestCase):
 	def test_key_error(self):
 		TILES = (
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			None,
 			None,
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			None)
 		board = ThinkominoBoard(*TILES)
 		with self.assertRaises(KeyError):
@@ -277,20 +283,20 @@ class ThinkominoBoardTest(TestCase):
 	def test_iterable(self):
 		TILES = (
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, YELLOW,
+				GREEN, ORANGE, RED),
 			ThinkominoTile(
-				ThinkominoColour.ORANGE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.PURPLE, ThinkominoColour.RED),
+				ORANGE, BLUE, GREEN,
+				YELLOW, PURPLE, RED),
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			None)
 		iterator = iter(ThinkominoBoard(*TILES))
 		self.assertEqual(next(iterator), TILES[0])
@@ -305,24 +311,24 @@ class ThinkominoBoardTest(TestCase):
 	def test_membership_checking(self):
 		TILES = (
 			ThinkominoTile(
-				ThinkominoColour.RED, ThinkominoColour.ORANGE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.BLUE, ThinkominoColour.PURPLE),
+				RED, ORANGE, YELLOW,
+				GREEN, BLUE, PURPLE),
 			ThinkominoTile(
-				ThinkominoColour.BLUE, ThinkominoColour.GREEN, ThinkominoColour.ORANGE,
-				ThinkominoColour.PURPLE, ThinkominoColour.RED, ThinkominoColour.YELLOW),
+				BLUE, GREEN, ORANGE,
+				PURPLE, RED, YELLOW),
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.YELLOW,
-				ThinkominoColour.GREEN, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, YELLOW,
+				GREEN, ORANGE, RED),
 			ThinkominoTile(
-				ThinkominoColour.ORANGE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.PURPLE, ThinkominoColour.RED),
+				ORANGE, BLUE, GREEN,
+				YELLOW, PURPLE, RED),
 			ThinkominoTile(
-				ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.GREEN,
-				ThinkominoColour.YELLOW, ThinkominoColour.ORANGE, ThinkominoColour.RED),
+				PURPLE, BLUE, GREEN,
+				YELLOW, ORANGE, RED),
 			None)
 		board = ThinkominoBoard(*TILES)
 		for tile in TILES:
 			self.assertTrue(tile in board)
 		self.assertFalse(ThinkominoTile(
-			ThinkominoColour.PURPLE, ThinkominoColour.BLUE, ThinkominoColour.ORANGE,
-			ThinkominoColour.YELLOW, ThinkominoColour.GREEN, ThinkominoColour.RED) in board)
+			PURPLE, BLUE, ORANGE,
+			YELLOW, GREEN, RED) in board)
