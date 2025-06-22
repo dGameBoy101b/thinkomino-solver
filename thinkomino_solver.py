@@ -1,3 +1,4 @@
+from typing import Generator
 from thinkomino_tile import ThinkominoTile
 from thinkomino_board import ThinkominoBoard
 from multiprocessing.pool import Pool
@@ -29,7 +30,7 @@ class ThinkominoSolver:
 				self.logger.error(f'Failed to load tiles: {x!r}')
 			raise x
 
-	def _generate_boards(self, tiles: list[ThinkominoTile]) -> ThinkominoBoard:
+	def _generate_boards(self, tiles: list[ThinkominoTile]) -> Generator[ThinkominoBoard]:
 		#log start
 		if self.logger is not None:
 			self.logger.info('Generating boards...')
