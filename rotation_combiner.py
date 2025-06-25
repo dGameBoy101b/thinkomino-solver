@@ -1,23 +1,23 @@
 from dataclasses import dataclass
 from typing import Iterator
 from list_rotator import constrain_step, max_rotations, rotate
+	
+@dataclass(init=False, frozen=True)
+class Rotateable:
+	iterable: tuple
+	step: int = 1
+
+	def __init__(self, iterable:tuple, step:int = 1):
+		super().__setattr__("iterable", tuple(iterable))
+		super().__setattr__("step", constrain_step(iterable, step))
+
+	def __iter__(self):
+		return iter((self.iterable, self.step))
 
 class RotationCombinations(Iterator[tuple[tuple]]):
 
-	@dataclass(init=False, frozen=True)
-	class Rotateable:
-		iterable: tuple
-		step: int = 1
-
-		def __init__(self, iterable:tuple, step:int = 1):
-			super().__setattr__("iterable", tuple(iterable))
-			super().__setattr__("step", constrain_step(iterable, step))
-
-		def __iter__(self):
-			return iter((self.iterable, self.step))
-
 	def __init__(self, rotateables:tuple[Rotateable]):
-		self.rotateables = tuple(RotationCombinations.Rotateable(*rotateable) for rotateable in rotateables)
+		self.rotateables = tuple(Rotateable(*rotateable) for rotateable in rotateables)
 		self.__step_indices = [0] * len(self.rotateables)
 
 	def __iter__(self):

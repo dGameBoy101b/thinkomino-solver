@@ -1,5 +1,5 @@
 from unittest import TestCase
-from rotation_combiner import RotationCombinations
+from rotation_combiner import Rotateable, RotationCombinations
 
 class RotationCombinerTests(TestCase):
 
@@ -117,7 +117,7 @@ class RotationCombinerTests(TestCase):
 	
 	def test_rotateable_unpacking(self):
 		args = ((1,2,3), -2)
-		rotateable = RotationCombinations.Rotateable(*args)
+		rotateable = Rotateable(*args)
 		self.assertTupleEqual(args, (*rotateable,))
 		self.assertTupleEqual(args, tuple(rotateable))
-		self.assertEqual(rotateable, RotationCombinations.Rotateable(*rotateable))
+		self.assertEqual(rotateable, Rotateable(*rotateable))
