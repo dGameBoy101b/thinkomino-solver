@@ -1,35 +1,41 @@
-from typing import Iterator, NamedTuple
+from dataclasses import dataclass
+from typing import Iterator
 from list_rotator import constrain_step, max_rotations, rotate
 
 class RotationCombinations(Iterator[tuple[tuple]]):
 
-	class Pair(NamedTuple):
-		iterable:tuple
-		step:int
+	@dataclass(init=False, frozen=True)
+	class Rotateable:
+		iterable: tuple
+		step: int = 1
 
-	def __init__(self, iterable_step_pairs:tuple[Pair]):
-		self.iterable_step_pairs = tuple(iterable_step_pairs)
-		for pair in self.iterable_step_pairs:
-			pair.iterable = tuple(pair.iterable)
-			pair.step = constrain_step(pair.iterable, pair.step)
-		self.__step_indices = (0,) * len(self.iterable_step_pairs)
+		def __init__(self, iterable:tuple, step:int = 1):
+			super().__setattr__("iterable", tuple(iterable))
+			super().__setattr__("step", constrain_step(iterable, step))
+
+		def __iter__(self):
+			return iter((self.iterable, self.step))
+
+	def __init__(self, rotateables:tuple[Rotateable]):
+		self.rotateables = tuple(RotationCombinations.Rotateable(*rotateable) for rotateable in rotateables)
+		self.__step_indices = [0] * len(self.rotateables)
 
 	def __iter__(self):
 		return self
 	
 	def __next__(self)->tuple[tuple]:
-		if self.iterable_step_pairs is None:
+		if self.rotateables is None:
 			raise StopIteration
 		result = self.__current()
 		if self.__increment_rotations():
-			self.iterable_step_pairs = None
+			self.rotateables = None
 		return result
 
 	def __current(self)->tuple[tuple]:
 		result = list()
-		for index in range(len(self.iterable_step_pairs)):
-			pair = self.iterable_step_pairs[index]
-			result.append(rotate(pair.iterable, pair.step * self.__step_indices[index]))
+		for index in range(len(self.rotateables)):
+			rotableable = self.rotateables[index]
+			result.append(rotate(rotableable.iterable, rotableable.step * self.__step_indices[index]))
 		return tuple(result)
 
 	def __increment_rotations(self)->bool:
@@ -38,8 +44,8 @@ class RotationCombinations(Iterator[tuple[tuple]]):
 		self.__step_indices[0] += 1
 
 		for index in range(len(self.__step_indices)):
-			pair = self.iterable_step_pairs[index]
-			if self.__step_indices[index] < max_rotations(pair.iterable, pair.step):
+			rotateable = self.rotateables[index]
+			if self.__step_indices[index] < max_rotations(rotateable.iterable, rotateable.step):
 				return False #all indices in range
 			self.__step_indices[index] = 0
 			if index + 1 < len(self.__step_indices):
@@ -48,6 +54,6 @@ class RotationCombinations(Iterator[tuple[tuple]]):
 
 	def __len__(self)->int:
 		product = 1
-		for pair in self.iterable_step_pairs:
-			product *= max_rotations(pair.iterable, pair.step)
+		for rotateable in self.rotateables:
+			product *= max_rotations(rotateable.iterable, rotateable.step)
 		return product
