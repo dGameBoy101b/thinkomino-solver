@@ -13,6 +13,13 @@ class Rotateable:
 
 	def __iter__(self):
 		return iter((self.iterable, self.step))
+	
+def max_rotation_combinations(rotateables:tuple[Rotateable])->int:
+		rotateables = tuple(Rotateable(*rotateable) for rotateable in rotateables)
+		product = 1
+		for rotateable in rotateables:
+			product *= max_rotations(rotateable.iterable, rotateable.step)
+		return product
 
 class RotationCombinations(Iterator[tuple[tuple]]):
 
@@ -53,7 +60,4 @@ class RotationCombinations(Iterator[tuple[tuple]]):
 		return True #all indices maxed; thus last value
 
 	def __len__(self)->int:
-		product = 1
-		for rotateable in self.rotateables:
-			product *= max_rotations(rotateable.iterable, rotateable.step)
-		return product
+		return max_rotation_combinations(self.rotateables)
